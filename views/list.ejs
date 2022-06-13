@@ -1,0 +1,63 @@
+
+<!-- we can use a layout for all our pages of the website when using ejs -->
+<!-- for that, we create common ejs files which needs to be present in all our pages in the website -->
+<!-- for that, we use spacial ejs tag "include" -->
+
+    <%- include ("header")-%>
+
+    <h1 id="message">Make a to-do list to start your day!</h1>
+
+    <h2>
+        <li class="instructions">
+            Use '+' icon to add new Item 
+        </li>
+        <li class="instructions">
+            mark the checkbox to remove the item
+        </li>
+    </h2>
+    <h1 class="calender"> <%= kindOfDay %> </h1>
+
+    <div class="box" id="heading">
+        <h1><%= listTitle %></h1>
+    </div>
+
+    <!-- display what are the to do tasks added to the list -->
+
+    <div class="box">
+        <% addNewItems.forEach(function(item){ %>
+            <form action="/delete" method="post">
+                <div class="item">
+                    <!-- we want that when we click on the checkbox, that pariticular item should be deleted -->
+                    <!-- so, we add name to the checkbox so that bodyparser can use it -->
+                    <!-- also, we add value to it so that we can get hold of id of that particular item -->
+                    <!-- also, to make the checkbox responsive of change, we use "onChange" method -->
+                    <input type="checkbox" name="itemToDelete" value="<%=item._id%>" onChange="this.form.submit()">
+                    <!-- we only need name of the items to be rendered on the website -->
+                    <p><%= item.name %></p>
+                </div>
+                <!-- hidden data will be used to delete list items from custom list -->
+                <input type="hidden" name="listName", value="<%=listTitle%>"></input>
+            </form>
+        <% }); %>
+
+        <!-- we create a form to send data back from page to the server -->
+        <!-- we use post method to do so, and out action is the home or root route -->
+        <!-- the button should have type submit, so that it can trigger the post mehod to home route -->
+
+        <!-- enter new to do task -->
+        <form class="item" action="/" method="post">
+            <input type="text" name="newItem" placeholder="new item" autocomplete="off">
+            <button type="submit" name="list", value="<%=listTitle%>"> + </button>
+        </form>
+    </div>
+    <h2>
+        <li class="instructions">
+            to create a custom to-do-list, like home, office, <br>
+            redirect the homepage to <em>/listName</em> to create the list, eg., /office
+        </li>
+        <li class="instructions">
+            it will automatically create a new list with name entered by you
+        </li>
+    </h2>
+
+    <%- include ("footer")-%>
