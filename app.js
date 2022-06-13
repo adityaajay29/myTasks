@@ -150,22 +150,36 @@ app.post("/", function(req, res)
         }
     );
 
-    // if we are on home route, then add the items to home route list
-    if(listName === "Today")
+    if(itemName != "")
     {
-        newItem.save();
-        // redirecting the post response back to our root route so that it can be added to the list of new items
-        res.redirect("/");
+        // if we are on home route, then add the items to home route list
+        if(listName === "Today")
+        {
+            newItem.save();
+            // redirecting the post response back to our root route so that it can be added to the list of new items
+            res.redirect("/");
+        }
+        // else add the item to the "listName" list
+        else
+        {
+            CustomList.findOne({name : listName}, function(err, foundList)
+            {
+                foundList.items.push(newItem);
+                foundList.save();
+                res.redirect("/" + listName);
+            });
+        }
     }
-    // else add the item to the "listName" list
     else
     {
-        CustomList.findOne({name : listName}, function(err, foundList)
+        if(listName === "Today")
         {
-            foundList.items.push(newItem);
-            foundList.save();
+            res.redirect("/");
+        }
+        else
+        {
             res.redirect("/" + listName);
-        });
+        }
     }
 });
 
