@@ -1,12 +1,17 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const app = express();
 const date = require(__dirname + "/date.js");
 const _ = require("lodash");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // adding database to our app
 const mongoose = require("mongoose");
 const { getDate } = require("./date");
+
+const app = express();
 
 // setting server to use ejs
 // it will get hold of the ejs pages
@@ -30,7 +35,7 @@ var items=["leetcode", "web dev"];
 
 // creating new DB :
 
-mongoose.connect("mongodb+srv://adityaajay29:Ganesha123@adityacluster.wlqt1.mongodb.net/toDoListProjectDB?retryWrites=true&w=majority", {useNewUrlParser: true});
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
 
 const listSchema = new mongoose.Schema(
     {
